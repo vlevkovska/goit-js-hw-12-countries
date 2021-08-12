@@ -38,6 +38,19 @@ function searchCountry(e) {
     }
   });
 }
+
+// вызов отправки из формы
+function onSeach(event) {
+  const inputValue = event.target.value;
+
+  if (inputValue === '') {
+    refs.createMarkupEl.innerHTML = '';
+    return;
+  }
+
+  send(inputValue);
+}
+
 // console.log(fetchCountries(searchQuery));
 // console.log(data);
 //
