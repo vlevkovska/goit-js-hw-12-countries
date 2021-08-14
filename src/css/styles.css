@@ -100,6 +100,7 @@
 
 .country__item {
   text-decoration: none;
+  color: black;
 }
 /* .country__list {
   margin: 0 auto;
