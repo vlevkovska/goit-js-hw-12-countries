@@ -18,11 +18,18 @@ refs.input.addEventListener('input', debounce(searchCountry, 500));
 // refs.input.addEventListener('input', searchCountry);
 
 function searchCountry(e) {
-  const searchQuery = e.target.value;
-  console.log(searchQuery);
-  fetchCountries(searchQuery).then(data => {
+  const inputValue = e.target.value.trim();
+  console.log(inputValue);
+  if (inputValue) {
+    generateInputValueResult(inputValue);
+  }
+  resetOutput();
+}
+function generateInputValueResult(inputValue) {
+  fetchCountries(inputValue).then(data => {
     console.log(data);
     if (data.length > 10) {
+      resetOutput();
       error({
         title: 'Excuse me!!',
         text: 'Too many matches found. Please enter a more specific query!',
@@ -32,24 +39,44 @@ function searchCountry(e) {
     } else if (data.length === 1) {
       const countryMarkup = countryTpl(data[0]);
       refs.output.innerHTML = countryMarkup;
-    } else {
-      const countryMarkup = data.map(country => `<li>${country.name}</li>`).join('');
+    } else if (data.length <= 10) {
+      const countryMarkup = data
+        .map(country => `<li><a href=# class="country__item">${country.name}</a></li>`)
+        .join('');
       refs.output.innerHTML = `<ul class="country__list">${countryMarkup}</ul>`;
+      const countryListEl = document.querySelector('.country__list');
+      countryListEl.addEventListener('click', onCountryClick);
+    } else {
+      resetOutput();
+      error({
+        title: 'Excuse me!!',
+        text: `Country named ${inputValue} does not exist`,
+        delay: 4000,
+      });
     }
   });
 }
+function resetOutput() {
+  refs.output.innerHTML = '';
+}
+function onCountryClick(e) {
+  if (e.target.className === 'country__item') {
+    const inputValue = e.target.textContent;
+    generateInputValueResult(inputValue);
+  }
+}
 
 // вызов отправки из формы
-function onSeach(event) {
-  const inputValue = event.target.value;
+// function onSeach(event) {
+//   const inputValue = event.target.value;
 
-  if (inputValue === '') {
-    refs.createMarkupEl.innerHTML = '';
-    return;
-  }
+//   if (inputValue === '') {
+//     refs.createMarkupEl.innerHTML = '';
+//     return;
+//   }
 
-  send(inputValue);
-}
+//   send(inputValue);
+// }
 
 // console.log(fetchCountries(searchQuery));
 // console.log(data);

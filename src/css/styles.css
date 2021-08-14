@@ -86,12 +86,21 @@
   margin-bottom: 8px;
 }
 
+.country__item:hover,
+.country__item:focus {
+  color: #2196f3;
+  cursor: pointer;
+}
+
 .country__list li:hover,
 .country__list li:focus {
   color: #2196f3;
   cursor: pointer;
 }
 
+.country__item {
+  text-decoration: none;
+}
 /* .country__list {
   margin: 0 auto;
 } */
